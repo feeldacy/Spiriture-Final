@@ -1,0 +1,160 @@
+package Entities;
+
+import Main.Game;
+import gameState.Playing;
+
+import java.awt.geom.Rectangle2D;
+
+import static Utilz.Constants.ANI_SPEED;
+import static Utilz.Constants.EnemyConstants.*;
+import static Utilz.HelpMethods.*;
+import static Utilz.Constants.Directions.*;
+import static Utilz.Constants.GRAVITY;
+
+public abstract class Enemy extends Entity{
+    protected int enemyType;
+    protected boolean firstUpdate = true;
+    protected int walkDir = LEFT;
+    protected int tileY;
+    protected float attackDistance  = Game.TILE_SIZE;
+    protected boolean active = true;
+    protected boolean attackChecked;
+
+
+    public Enemy(float x, float y, int width, int height, int enemyType) {
+        super(x, y, width, height);
+        this.enemyType = enemyType;
+
+        maxHealth = getMaxHealth(enemyType);
+        currentHealth = maxHealth;
+        walkSpeed = Game.SCALE * 0.35f;
+    }
+
+    protected void firstUpdateCheck(int[][] lvlData) {
+        if (!isEntityOnFloor(hitBox, lvlData))
+            inAir = true;
+        firstUpdate = false;
+    }
+
+    protected void updateInAir(int[][] lvlData) {
+        if(canMoveHere(hitBox.x, hitBox.y + airSpeed, hitBox.width, hitBox.height, lvlData)) {
+            hitBox.y += airSpeed;
+            airSpeed += GRAVITY;
+        } else {
+            inAir = false;
+            hitBox.y = getEntityYPosUnderRoofOrAboveFloor(hitBox, airSpeed);
+            tileY = (int) (hitBox.y / Game.TILE_SIZE);
+        }
+    }
+
+    protected void move(int[][] lvlData) {
+        float xSpeed = 0;
+
+        if (walkDir == LEFT)
+            xSpeed = -walkSpeed;
+        else
+            xSpeed = walkSpeed;
+
+        if (canMoveHere(hitBox.x + xSpeed, hitBox.y, hitBox.width, hitBox.height, lvlData))
+            if (isFloor(hitBox, xSpeed, lvlData)) {
+                hitBox.x += xSpeed;
+                return;
+            }
+
+        changeWalkDir();
+    }
+
+    protected void turnTowardsPlayer(Player player) {
+        if (player.hitBox.x > hitBox.x)
+            walkDir = RIGHT;
+        else
+            walkDir = LEFT;
+    }
+
+    protected boolean canSeePlayer(int[][] lvlData, Player player) {
+        int playerTileY = (int) (player.getHitBox().y / Game.TILE_SIZE);
+        if (playerTileY == tileY)
+            if (isPlayerInRange(player)) {
+                if (isSightClear(lvlData, hitBox, player.hitBox, tileY))
+                    return true;
+            }
+
+        return false;
+    }
+
+    protected boolean isPlayerInRange(Player player) {
+        int absValue = (int) Math.abs(player.hitBox.x - hitBox.x);
+        return absValue <= attackDistance * 5;
+    }
+
+    protected boolean isPlayerCloseForAttack(Player player) {
+        int absValue = (int) Math.abs(player.hitBox.x - hitBox.x);
+        return absValue <= attackDistance;
+    }
+
+    protected void newState(int enemyState) {
+        this.state = enemyState;
+        aniTick = 0;
+        aniIndex = 0;
+    }
+
+    public void hurt(int amount) {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+            newState(DEAD);
+        else
+            newState(HIT);
+    }
+
+    protected void checkPlayerHit(Rectangle2D.Float attackBox, Player player) {
+        if (attackBox.intersects(player.hitBox))
+            player.changeHealth(-getEnemyDamage(enemyType));
+        attackChecked = true;
+
+    }
+
+    protected void updateAnimationTick(){
+        aniTick++;
+        if (aniTick >= ANI_SPEED){
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(enemyType, state)){
+                aniIndex = 0;
+
+                switch(state) {
+                    case ATTACK, HIT -> state = IDLE;
+                    case DEAD -> active = false;
+                }
+            }
+        }
+    }
+
+    protected void changeWalkDir() {
+        if (walkDir == LEFT)
+            walkDir  = RIGHT;
+        else
+            walkDir = LEFT;
+    }
+
+    public void resetEnemy() {
+        hitBox.x = x;
+        hitBox.y = y;
+        firstUpdate = true;
+        currentHealth = maxHealth;
+        newState(IDLE);
+        active = true;
+        airSpeed = 0;
+    }
+
+    protected void inAirChecks(int[][] lvlData, Playing playing) {
+        if (state != HIT && state != DEAD) {
+            updateInAir(lvlData);
+            if (IsEntityInWater(hitBox, lvlData))
+                hurt(maxHealth);
+        }
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+}

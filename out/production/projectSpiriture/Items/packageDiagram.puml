@@ -1,0 +1,77 @@
+@startuml
+
+package Items {
+    class Item {
+        - int x
+        - int y
+        - int objType
+        - Rectangle2D.Float hitBox
+        - boolean doAnimation
+        - boolean active
+        - int aniTick
+        - int aniIndex
+        - int xDrawOffset
+        - int yDrawOffset
+
+        + Item(int x, int y, int objType)
+        + void updateAnimationTick()
+        + void reset()
+        + void initHitBox(float width, int height)
+        + void drawHitBox(Graphics g, int xLvlOffset)
+        + int getObjType()
+        + Rectangle2D.Float getHitBox()
+        + boolean isActive()
+        + void setActive(boolean active)
+        + void setAnimation(boolean doAnimation)
+        + int getxDrawOffset()
+        + int getyDrawOffset()
+        + int getAniIndex()
+    }
+}
+
+package Items{
+    class ItemContainer {
+        + ItemContainer(int x, int y, int objType)
+        - void createHitBox()
+        + void update()
+
+    }
+        ItemContainer --|> Item
+}
+
+package Items {
+    class ItemManager {
+        - Playing playing
+        - BufferedImage[][] potionImgs
+        - BufferedImage[][] containerImgs
+        - ArrayList<Potion> potions
+        - ArrayList<ItemContainer> containers
+
+        + ItemManager(Playing playing)
+        + void checkObjekTouched(Rectangle2D.Float hitBox)
+        + void applyEffectToPlayer(Potion p)
+        + void checkItemHit(Rectangle2D.Float attackbox)
+        + void loadObject(Level newLevel)
+        - void loadImgs()
+        + void update()
+        + void draw(Graphics g, int xLvlOffset)
+        - void drawContainers(Graphics g, int xLvlOffset)
+        - void drawPotions(Graphics g, int xLvlOffset)
+        + void resetAllItems()
+    }
+}
+
+package Items {
+    class Potion {
+        - float hoverOffset
+        - int maxHoverOffset
+        - int hoverDir = 1
+
+        + Potion(int x, int y, int objType)
+        + void update()
+        - void updateHover()
+    }
+
+    Potion --|> Item
+}
+@enduml
