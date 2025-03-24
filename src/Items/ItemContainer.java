@@ -22,7 +22,7 @@ public class ItemContainer extends Item{
             yDrawOffset = (int) (5 * Game.SCALE);
         }
         hitBox.y += yDrawOffset + (int) (Game.SCALE * 2);
-        hitBox.x += xDrawOffset / 2;
+        hitBox.x += (double) xDrawOffset / 2;
     }
 
     public void update(){

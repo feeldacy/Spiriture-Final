@@ -1,6 +1,5 @@
 package Utilz;
 
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoadSave {
+    private static final Logger logger = Logger.getLogger(LoadSave.class.getName());
 
     public static final String PLAYER_ATLAS = "Spirit_Ani.png";
     public static final String LEVEL_ATLAS = "Tileset_Spiriture.png";
@@ -41,18 +43,20 @@ public class LoadSave {
     public static final String WATER_TOP = "water_atlas_animation.png";
     public static final String WATER_BOTTOM = "water.png";
 
+    private static String msg = "Error reading imagee";
+
     public static BufferedImage GetSpriteAtlas(String fileName){
         BufferedImage img = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
         try {
             img = ImageIO.read(is);
         } catch (IOException e){
-            e.printStackTrace();
+            logger.log(Level.SEVERE, msg, e);
         } finally {
             try{
                 is.close();
             } catch (IOException e){
-                e.printStackTrace();
+                logger.log(Level.SEVERE, msg, e);
             }
         }
         return img;
@@ -60,15 +64,32 @@ public class LoadSave {
 
     public static BufferedImage[] GetAllLevels() {
         URL url = LoadSave.class.getResource("/lvls");
-        File file = null;
 
+        if (url == null) {
+            logger.log(Level.SEVERE, "Resource folder '/lvls' not found.");
+            return new BufferedImage[0];
+        }
+
+        File file = null;
         try {
             file = new File(url.toURI());
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Invalid URI syntax", e);
+            return new BufferedImage[0];
+        }
+
+
+        if (file == null || !file.exists() || !file.isDirectory()) {
+            logger.log(Level.SEVERE, "Invalid directory: " + file);
+            return new BufferedImage[0];
         }
 
         File[] files = file.listFiles();
+        if (files == null || files.length == 0) {
+            logger.log(Level.SEVERE, "No level files found in '/lvls'");
+            return new BufferedImage[0];
+        }
+
         File[] filesSorted = new File[files.length];
 
         for (int i = 0; i < filesSorted.length; i++)
@@ -79,16 +100,19 @@ public class LoadSave {
 
         BufferedImage[] imgs = new BufferedImage[filesSorted.length];
 
-        for (int i = 0; i < imgs.length; i++)
+        for (int i = 0; i < imgs.length; i++) {
             try {
-                imgs[i] = ImageIO.read(filesSorted[i]);
+                if (filesSorted[i] != null) {
+                    imgs[i] = ImageIO.read(filesSorted[i]);
+                } else {
+                    logger.log(Level.SEVERE, "Missing level file: " + (i + 1) + ".png");
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Error loading image: " + filesSorted[i], e);
             }
+        }
 
         return imgs;
     }
-
-
 
 }

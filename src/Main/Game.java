@@ -32,11 +32,13 @@ public class Game implements Runnable{
     public final static float SCALE = 1.5f;
     public final static int TILE_INWIDTH = 26;
     public final static int TILE_INHEIGHT = 14;
-    public final static int TILE_SIZE = (int)(TILE_DEFAULT_SIZE * SCALE);
+    public final static int TILE_SIZE = (int) (TILE_DEFAULT_SIZE * SCALE);
     public final static int GAME_WIDTH = TILE_SIZE * TILE_INWIDTH;
     public final static int GAME_HEIGHT = TILE_SIZE * TILE_INHEIGHT;
+    private boolean running = true;
 
-    public Game(){
+
+    public Game() {
         initClasses();
 
         gamePanel = new GamePanel(this);
@@ -57,7 +59,7 @@ public class Game implements Runnable{
 
     }
 
-    private void startGameLoop(){
+    private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -96,20 +98,20 @@ public class Game implements Runnable{
         double deltaU = 0;
         double deltaF = 0;
 
-        while (true) {
+        while (running) {
             long currentTime = System.nanoTime();
 
             deltaU += (currentTime - previousTime) / timePerUpdate;
             deltaF += (currentTime - previousTime) / timePerFrame;
             previousTime = currentTime;
 
-            if (deltaU >= 1){
+            if (deltaU >= 1) {
                 update();
                 updates++;
                 deltaU--;
             }
 
-            if (deltaF >= 1){
+            if (deltaF >= 1) {
                 gamePanel.repaint();
                 deltaF--;
                 frames++;
@@ -124,19 +126,20 @@ public class Game implements Runnable{
         }
     }
 
-    public void windowFocusLost(){
-        if (GameState.state == GameState.PLAYING){
+    public void windowFocusLost() {
+        if (GameState.state == GameState.PLAYING) {
             playing.getPlayer().resetDirBooleans();
         }
     }
 
-    public Menus getMenus(){
+    public Menus getMenus() {
         return menus;
     }
 
-    public Playing getPlaying(){
+    public Playing getPlaying() {
         return playing;
     }
+
     public Credits getCredits() {
         return credits;
     }
@@ -145,10 +148,11 @@ public class Game implements Runnable{
         return gameOptions;
     }
 
-    public AudioOptions getAudioOptions(){
+    public AudioOptions getAudioOptions() {
         return audioOptions;
     }
-    public AudioPlayer getAudioPlayer(){
+
+    public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }
 }

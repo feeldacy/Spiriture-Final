@@ -12,6 +12,7 @@ import static Utilz.HelpMethods.IsFloor;
 public class Bush extends Enemy{
     private int attackBoxOffsetX;
 
+
     public Bush(float x, float y) {
         super(x, y, BUSH_WIDTH, BUSH_HEIGHT, BUSH);
         initHitBox(30, 27);

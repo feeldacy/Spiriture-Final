@@ -17,7 +17,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import static Utilz.Constants.Environment.*;
-import java.util.Random;
+
+import java.security.SecureRandom;
 
 public class Playing extends State implements StateMethods{
     private Player player;
@@ -38,7 +39,7 @@ public class Playing extends State implements StateMethods{
 
     private BufferedImage backgroundImg, movingTree, movingSmallTree;
     private int[] movingSmallTreePos;
-    private Random rnd = new Random();
+    private SecureRandom rnd = new SecureRandom();
 
     private boolean gameOver;
     private boolean lvlCompleted;

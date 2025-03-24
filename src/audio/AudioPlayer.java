@@ -3,9 +3,13 @@ package audio;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Random;
+import java.security.SecureRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AudioPlayer {
+    private static final Logger logger = Logger.getLogger(AudioPlayer.class.getName());
+
     public static int MENU_1 = 0;
     public static int LEVEL_1 = 1;
     public static int LEVEL_2 = 2;
@@ -22,7 +26,7 @@ public class AudioPlayer {
     private int currentSongId;
     private float volume = 1f;
     private boolean songMute, effectMute;
-    private Random rand = new Random();
+    private SecureRandom rand = new SecureRandom();
 
     public AudioPlayer() {
         loadSongs();
@@ -59,7 +63,7 @@ public class AudioPlayer {
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
 
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error reading audio", e);
         }
 
         return null;
