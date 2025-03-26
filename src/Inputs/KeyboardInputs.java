@@ -15,7 +15,7 @@ public class KeyboardInputs implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        // Method dibiarkan kosong karena keyTyped tidak digunakan di dalam game
     }
 
     @Override

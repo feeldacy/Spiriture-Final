@@ -92,6 +92,7 @@ public class Constants {
                         return 18;
                     else if (enemy_type == SLIME)
                         return 12;
+                    return -1;
                 }
 
                 case DEAD: {
@@ -101,6 +102,7 @@ public class Constants {
                         return 13;
                     else if (enemy_type == SLIME)
                         return 10;
+                    return -1;
                 }
 
                 case HIT: {
@@ -108,6 +110,7 @@ public class Constants {
                         return 5;
                     else if (enemy_type == BUSH || enemy_type == SLIME)
                         return 4;
+                    return -1;
                 }
 
                 case RUNNING: {
@@ -125,13 +128,10 @@ public class Constants {
         public static int getMaxHealth(int enemy_type) {
             switch (enemy_type) {
                 case SLIME:
-//                    return 25;
                     return 15;
                 case MUSHROOM:
-//                    return 30;
                     return 20;
                 case BUSH:
-//                    return 40;
                     return 25;
                 default:
                     return 1;
@@ -141,13 +141,10 @@ public class Constants {
         public static int getEnemyDamage(int enemy_type) {
             switch (enemy_type) {
                 case SLIME:
-//                    return 10;
                     return 5;
                 case MUSHROOM:
-//                    return 15;
                     return 10;
                 case BUSH:
-//                    return 20;
                     return 15;
                 default:
                     return 0;
@@ -217,13 +214,11 @@ public class Constants {
             switch (player_action){
                 case DEATH:
                     return 8;
-                case WALK:
-                case ATTACK:
+                case WALK, ATTACK:
                     return 6;
                 case JUMP:
                     return 5;
-                case IDLE:
-                case HIT:
+                case IDLE, HIT:
                     return 4;
                 case FALLING:
                     return 3;

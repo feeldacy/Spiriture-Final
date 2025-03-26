@@ -1,14 +1,10 @@
 package Utilz;
 
-import Items.*;
 import Main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
-import static Utilz.Constants.ItemConstants.*;
 
 public class HelpMethods {
 
@@ -96,19 +92,12 @@ public class HelpMethods {
             return isSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvlData);
     }
 
-    public static boolean IsFloor(Rectangle2D.Float hitBox, int[][] lvlData) {
+    public static boolean isFloorCurrent(Rectangle2D.Float hitBox, int[][] lvlData) {
         if (!isSolid(hitBox.x + hitBox.width, hitBox.y + hitBox.height + 1, lvlData))
             if (!isSolid(hitBox.x, hitBox.y + hitBox.height + 1, lvlData))
                 return false;
         return true;
     }
-
-//    public static boolean isAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
-//        for (int i = 0; i < xEnd - xStart; i++)
-//            if (isTileSolid(xStart + i, y, lvlData))
-//                return false;
-//        return true;
-//    }
 
     public static boolean isAllTileWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
         for (int i = 0; i < xEnd - xStart; i++){

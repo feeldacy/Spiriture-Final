@@ -5,18 +5,13 @@ import Utilz.LoadSave;
 import audio.AudioPlayer;
 import gameState.Playing;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+
 
 import static Utilz.Constants.*;
-import static Utilz.Constants.Directions.*;
-import static Utilz.Constants.Directions.DOWN;
 import static Utilz.Constants.EnemyConstants.DEAD;
-import static Utilz.Constants.ItemConstants.GetSpriteAmount;
 import static Utilz.Constants.PlayerConstants.*;
 import static Utilz.HelpMethods.*;
 import static Utilz.Constants.GRAVITY;
@@ -113,13 +108,14 @@ public class Player extends Entity {
                 playing.getGame().getAudioPlayer().playEffect(AudioPlayer.GAMEOVER);
             } else {
                 updateAnimationTick();
-                if (inAir)
+                if (inAir) {
                     if (canMoveHere(hitBox.x, hitBox.y + airSpeed, hitBox.width, hitBox.height, lvlData)) {
                         hitBox.y += airSpeed;
                         airSpeed += GRAVITY;
-                    } else
+                    } else {
                         inAir = false;
-
+                    }
+                }
             }
 
             return;
@@ -160,10 +156,8 @@ public class Player extends Entity {
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
-        attackChecked = true;
 
-        if(powerAttackActive)
-            attackChecked = false;
+        attackChecked = !powerAttackActive;
 
         playing.checkEnemyHit(attackBox);
         playing.checkItemHit(attackBox);
@@ -204,8 +198,6 @@ public class Player extends Entity {
                 (int) (hitBox.x - xDrawOffSet) - lvlOffset + flipX,
                 (int) (hitBox.y - yDrawOffSet),
                 width * flipW, height, null);
-//        drawHitBox(g, lvlOffset);
-//        drawAttackBox(g,lvlOffset);
         drawUI(g);
     }
 
@@ -290,10 +282,8 @@ public class Player extends Entity {
         if (jump)
             jump();
 
-        if (!inAir)
-            if (!powerAttackActive)
-                if ((!left && !right) || (right && left))
-                    return;
+        if (!inAir && !powerAttackActive && ((!left && !right) || (right && left)))
+            return;
 
         float xSpeed = 0;
 
@@ -319,9 +309,8 @@ public class Player extends Entity {
             xSpeed *= 3;
         }
 
-        if (!inAir)
-            if (!isEntityOnFloor(hitBox, lvlData))
-                inAir = true;
+        if (!inAir && !isEntityOnFloor(hitBox, lvlData))
+            inAir = true;
 
         if (inAir && !powerAttackActive) {
             if (canMoveHere(hitBox.x, hitBox.y + airSpeed, hitBox.width, hitBox.height, lvlData)) {

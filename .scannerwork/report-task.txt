@@ -1,0 +1,6 @@
+projectKey=verval2
+serverUrl=http://localhost:9000
+serverVersion=25.3.0.104237
+dashboardUrl=http://localhost:9000/dashboard?id=verval2
+ceTaskId=ce9eeb93-d587-4af6-8382-8985916d2fac
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ce9eeb93-d587-4af6-8382-8985916d2fac

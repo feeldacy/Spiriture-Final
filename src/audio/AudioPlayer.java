@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AudioPlayer {
+
     private static final Logger logger = Logger.getLogger(AudioPlayer.class.getName());
 
     public static int MENU_1 = 0;
@@ -27,6 +28,7 @@ public class AudioPlayer {
     private float volume = 1f;
     private boolean songMute, effectMute;
     private SecureRandom rand = new SecureRandom();
+
 
     public AudioPlayer() {
         loadSongs();

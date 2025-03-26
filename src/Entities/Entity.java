@@ -22,7 +22,7 @@ public abstract class Entity {
     protected float walkSpeed;
     protected int z;
 
-    public Entity(float x, float y, int width, int height){
+    protected Entity(float x, float y, int width, int height){
         this.x = x;
         this.y = y;
         this.width = width;

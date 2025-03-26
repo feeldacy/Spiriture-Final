@@ -21,7 +21,7 @@ public abstract class Enemy extends Entity{
     protected boolean attackChecked;
 
 
-    public Enemy(float x, float y, int width, int height, int enemyType) {
+    protected Enemy(float x, float y, int width, int height, int enemyType) {
         super(x, y, width, height);
         this.enemyType = enemyType;
 
@@ -55,8 +55,7 @@ public abstract class Enemy extends Entity{
         else
             xSpeed = walkSpeed;
 
-        if (canMoveHere(hitBox.x + xSpeed, hitBox.y, hitBox.width, hitBox.height, lvlData))
-            if (isFloor(hitBox, xSpeed, lvlData)) {
+        if (canMoveHere(hitBox.x + xSpeed, hitBox.y, hitBox.width, hitBox.height, lvlData) && isFloor(hitBox, xSpeed, lvlData)) {
                 hitBox.x += xSpeed;
                 return;
             }
@@ -73,13 +72,7 @@ public abstract class Enemy extends Entity{
 
     protected boolean canSeePlayer(int[][] lvlData, Player player) {
         int playerTileY = (int) (player.getHitBox().y / Game.TILE_SIZE);
-        if (playerTileY == tileY)
-            if (isPlayerInRange(player)) {
-                if (isSightClear(lvlData, hitBox, player.hitBox, tileY))
-                    return true;
-            }
-
-        return false;
+        return playerTileY == tileY && isPlayerInRange(player) && isSightClear(lvlData, hitBox, player.hitBox, tileY);
     }
 
     protected boolean isPlayerInRange(Player player) {
@@ -92,6 +85,7 @@ public abstract class Enemy extends Entity{
         return absValue <= attackDistance;
     }
 
+    @Override
     protected void newState(int enemyState) {
         this.state = enemyState;
         aniTick = 0;
@@ -121,9 +115,10 @@ public abstract class Enemy extends Entity{
             if (aniIndex >= GetSpriteAmount(enemyType, state)){
                 aniIndex = 0;
 
-                switch(state) {
-                    case ATTACK, HIT -> state = IDLE;
-                    case DEAD -> active = false;
+                if (state == DEAD) {
+                    active = false;
+                } else {
+                    state = IDLE;
                 }
             }
         }

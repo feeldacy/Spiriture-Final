@@ -94,11 +94,11 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        // Method dibiarkan kosong karena mouseEntered tidak digunakan di dalam game
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        // Method dibiarkan kosong karena mouseExited tidak digunakan di dalam game
     }
 }

@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 
 import static Utilz.Constants.Directions.*;
 import static Utilz.Constants.EnemyConstants.*;
-import static Utilz.HelpMethods.IsFloor;
+import static Utilz.HelpMethods.isFloorCurrent;
 
 public class Slime extends Enemy{
 
@@ -45,7 +45,7 @@ public class Slime extends Enemy{
         } else {
             switch (state) {
                 case IDLE:
-                    if (IsFloor(hitBox, lvlData))
+                    if (isFloorCurrent(hitBox, lvlData))
                         newState(RUNNING);
                     else
                         inAir = true;
@@ -64,7 +64,10 @@ public class Slime extends Enemy{
                     if (aniIndex == 3 && !attackChecked)
                         checkPlayerHit(attackBox, playing.getPlayer());
                     break;
-                case HIT:
+                case HIT, DEAD:
+                    break;
+                default:
+                    newState(IDLE);
                     break;
             }
         }

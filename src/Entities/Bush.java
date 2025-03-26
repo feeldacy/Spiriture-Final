@@ -7,7 +7,7 @@ import java.awt.geom.Rectangle2D;
 
 import static Utilz.Constants.Directions.RIGHT;
 import static Utilz.Constants.EnemyConstants.*;
-import static Utilz.HelpMethods.IsFloor;
+import static Utilz.HelpMethods.isFloorCurrent;
 
 public class Bush extends Enemy{
     private int attackBoxOffsetX;
@@ -44,7 +44,7 @@ public class Bush extends Enemy{
         } else {
             switch (state) {
                 case IDLE:
-                    if (IsFloor(hitBox, lvlData))
+                    if (isFloorCurrent(hitBox, lvlData))
                         newState(RUNNING);
                     else
                         inAir = true;
@@ -63,7 +63,10 @@ public class Bush extends Enemy{
                     if (aniIndex == 3 && !attackChecked)
                         checkPlayerHit(attackBox, playing.getPlayer());
                     break;
-                case HIT:
+                case HIT, DEAD:
+                    break;
+                default:
+                    newState(IDLE);
                     break;
             }
         }

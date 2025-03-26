@@ -9,7 +9,6 @@ import Main.Game;
 
 import static Utilz.Constants.EnemyConstants.*;
 import static Utilz.Constants.ItemConstants.*;
-import static Utilz.HelpMethods.GetLevelData;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -61,9 +60,16 @@ public class Level {
 
     private void loadEntities(int greenValue, int x, int y) {
         switch (greenValue) {
-            case SLIME ->  slimes.add(new Slime (x * (float )Game.TILE_SIZE, y * (float) Game.TILE_SIZE));
-            case MUSHROOM -> mushrooms.add(new Mushroom(x * (float) Game.TILE_SIZE, y * (float) Game.TILE_SIZE));
-            case BUSH -> bushes.add(new Bush(x * (float) Game.TILE_SIZE, y * (float) Game.TILE_SIZE));
+            case SLIME ->
+                    slimes.add(new Slime (x * (float )Game.TILE_SIZE,
+                            y * (float) Game.TILE_SIZE));
+            case MUSHROOM ->
+                    mushrooms.add(new Mushroom(x * (float) Game.TILE_SIZE,
+                            y * (float) Game.TILE_SIZE));
+            case BUSH ->
+                    bushes.add(new Bush(x * (float) Game.TILE_SIZE,
+                            y * (float) Game.TILE_SIZE));
+
             case 100 -> playerSpawn = new Point(x * Game.TILE_SIZE, y * Game.TILE_SIZE);
         }
     }

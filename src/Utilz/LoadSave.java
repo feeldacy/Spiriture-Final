@@ -64,53 +64,33 @@ public class LoadSave {
 
     public static BufferedImage[] GetAllLevels() {
         URL url = LoadSave.class.getResource("/lvls");
-
-        if (url == null) {
-            logger.log(Level.SEVERE, "Resource folder '/lvls' not found.");
-            return new BufferedImage[0];
-        }
-
         File file = null;
+
         try {
+            assert url != null;
             file = new File(url.toURI());
         } catch (URISyntaxException e) {
-            logger.log(Level.SEVERE, "Invalid URI syntax", e);
-            return new BufferedImage[0];
+            logger.log(Level.SEVERE, "Error reading image level", e);
         }
 
-
-        if (file == null || !file.exists() || !file.isDirectory()) {
-            logger.log(Level.SEVERE, "Invalid directory: " + file);
-            return new BufferedImage[0];
-        }
-
+        assert file != null;
         File[] files = file.listFiles();
-        if (files == null || files.length == 0) {
-            logger.log(Level.SEVERE, "No level files found in '/lvls'");
-            return new BufferedImage[0];
-        }
-
         File[] filesSorted = new File[files.length];
 
         for (int i = 0; i < filesSorted.length; i++)
-            for (int j = 0; j < files.length; j++) {
-                if (files[j].getName().equals("" + (i + 1) + ".png"))
-                    filesSorted[i] = files[j];
+            for (File value : files) {
+                if (value.getName().equals((i + 1) + ".png"))
+                    filesSorted[i] = value;
             }
 
         BufferedImage[] imgs = new BufferedImage[filesSorted.length];
 
-        for (int i = 0; i < imgs.length; i++) {
+        for (int i = 0; i < imgs.length; i++)
             try {
-                if (filesSorted[i] != null) {
-                    imgs[i] = ImageIO.read(filesSorted[i]);
-                } else {
-                    logger.log(Level.SEVERE, "Missing level file: " + (i + 1) + ".png");
-                }
+                imgs[i] = ImageIO.read(filesSorted[i]);
             } catch (IOException e) {
-                logger.log(Level.SEVERE, "Error loading image: " + filesSorted[i], e);
+                logger.log(Level.SEVERE, "Error load images", e);
             }
-        }
 
         return imgs;
     }

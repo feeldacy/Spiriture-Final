@@ -63,8 +63,6 @@ public class EnemyManager {
             if (s.isActive()) {
                 g.drawImage(slimeArr[s.getstate()][s.getAniIndex()], (int) s.getHitBox().x - xLvlOffset - SLIME_DRAW_OFFSET_X + s.flipX(),
                         (int) s.getHitBox().y - SLIME_DRAW_OFFSET_Y, SLIME_WIDTH * s.flipW(), SLIME_HEIGHT, null);
-//            c.drawHitBox(g, xLvlOffset);
-//                c.drawAttackBox(g, xLvlOffset);
             }
     }
 
@@ -73,8 +71,6 @@ public class EnemyManager {
             if (m.isActive()) {
                 g.drawImage(mushroomArr[m.getstate()][m.getAniIndex()], (int) m.getHitBox().x - xLvlOffset - MUSHROOM_DRAW_OFFSET_X + m.flipX(),
                         (int) m.getHitBox().y - MUSHROOM_DRAW_OFFSET_Y, MUSHROOM_WIDTH * m.flipW(), MUSHROOM_HEIGHT, null);
-//            c.drawHitBox(g, xLvlOffset);
-//                c.drawAttackBox(g, xLvlOffset);
             }
     }
 
@@ -83,15 +79,11 @@ public class EnemyManager {
             if (b.isActive()) {
                 g.drawImage(bushArr[b.getstate()][b.getAniIndex()], (int) b.getHitBox().x - xLvlOffset - BUSH_DRAW_OFFSET_X + b.flipX(),
                         (int) b.getHitBox().y - BUSH_DRAW_OFFSET_Y, BUSH_WIDTH * b.flipW(), BUSH_HEIGHT, null);
-//            c.drawHitBox(g, xLvlOffset);
-//                c.drawAttackBox(g, xLvlOffset);
             }
     }
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
         for (Slime s : currentLevel.getSlimes())
-            if (s.isActive())
-                if (s.getstate() != DEAD && s.getstate() != HIT)
-                    if (attackBox.intersects(s.getHitBox())) {
+            if (s.isActive() && s.getstate() != DEAD && s.getstate() != HIT && attackBox.intersects(s.getHitBox())) {
                         s.hurt(20);
                         return;
                     }
@@ -101,8 +93,7 @@ public class EnemyManager {
                 if (m.getstate() == ATTACK && m.getAniIndex() >= 3)
                     return;
                 else {
-                    if (m.getstate() != DEAD && m.getstate() != HIT)
-                        if (attackBox.intersects(m.getHitBox())) {
+                    if (m.getstate() != DEAD && m.getstate() != HIT && attackBox.intersects(m.getHitBox())) {
                             m.hurt(20);
                             return;
                         }
@@ -110,13 +101,11 @@ public class EnemyManager {
             }
 
         for (Bush b : currentLevel.getBushes())
-            if (b.isActive()) {
-                if (b.getstate() != DEAD && b.getstate() != HIT)
-                    if (attackBox.intersects(b.getHitBox())) {
+            if (b.isActive() && b.getstate() != DEAD && b.getstate() != HIT && attackBox.intersects(b.getHitBox())) {
                         b.hurt(20);
                         return;
                     }
-            }
+
     }
 
     private BufferedImage[][] getImgArr(BufferedImage atlas, int xSize, int ySize, int spriteW, int spriteH) {

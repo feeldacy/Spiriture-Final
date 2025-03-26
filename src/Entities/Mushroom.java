@@ -6,7 +6,7 @@ import gameState.Playing;
 import java.awt.geom.Rectangle2D;
 import static Utilz.Constants.EnemyConstants.*;
 import static Utilz.Constants.Directions.*;
-import static Utilz.HelpMethods.IsFloor;
+import static Utilz.HelpMethods.isFloorCurrent;
 
 public class Mushroom extends Enemy{
 
@@ -43,7 +43,7 @@ public class Mushroom extends Enemy{
         } else {
             switch (state) {
                 case IDLE:
-                    if (IsFloor(hitBox, lvlData))
+                    if (isFloorCurrent(hitBox, lvlData))
                         newState(RUNNING);
                     else
                         inAir = true;
@@ -62,7 +62,10 @@ public class Mushroom extends Enemy{
                     if (aniIndex == 3 && !attackChecked)
                         checkPlayerHit(attackBox, playing.getPlayer());
                     break;
-                case HIT:
+                case HIT, DEAD:
+                    break;
+                default:
+                    newState(IDLE);
                     break;
             }
         }
